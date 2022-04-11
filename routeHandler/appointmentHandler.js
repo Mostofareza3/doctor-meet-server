@@ -6,8 +6,7 @@ const Appointment = new mongoose.model("Appointment", appointmentSchema);
 const checkLogin = require("../middleware/checkLogin");
 
 // GET all appointment
-router.get("/", (req, res) => {
-
+router.get("/all", (req, res) => {
     Appointment.find({})
         .select({
             _id: 0,

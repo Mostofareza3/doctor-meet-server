@@ -7,7 +7,6 @@ const router = express.Router();
 
 // GET All by doctor
 router.get("/all", async (req, res) => {
-    // console.log("get hit");
     try {
         const data = await DoctorsCollection.find({});
         res.status(200).json({
@@ -38,9 +37,7 @@ router.get("/:id", async (req, res) => {
 
 // post doctor information
 router.post("/add", (req, res) => {
-    console.log("doctor hit");
     const newDoctor = new DoctorsCollection(req.body);
-    console.log(newDoctor);
     newDoctor.save((err) => {
         if (err) {
             res.status(500).json({

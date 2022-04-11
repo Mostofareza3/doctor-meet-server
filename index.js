@@ -11,6 +11,8 @@ const app = express();
 dotenv.config()
 app.use(express.json());
 
+const port = process.env.PORT || 5000;
+
 // database connection with mongoose
 mongoose
     .connect("mongodb+srv://doctors-meet:doctors-meet123@cluster0.myaif.mongodb.net/doctorsMeet?retryWrites=true&w=majority", {
@@ -39,6 +41,6 @@ const errorHandler = (err, req, res, next) => {
 
 app.use(errorHandler);
 
-app.listen(5000, () => {
-    console.log("app listening at port 5000");
+app.listen(port, () => {
+    console.log(`app listening at port ${port}`);
 });
