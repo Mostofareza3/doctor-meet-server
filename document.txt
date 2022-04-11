@@ -1,0 +1,23 @@
+url : https://immense-beyond-64415.herokuapp.com/
+
+
+api end-points:
+____________________
+appointment-section:-----
+
+post an appointment: https://immense-beyond-64415.herokuapp.com/appointment/add
+update an appointment: https://immense-beyond-64415.herokuapp.com/:id
+delete an appointment: https://immense-beyond-64415.herokuapp.com/:id
+get all appointment: https://immense-beyond-64415.herokuapp.com/all
+
+---------------------
+
+__________________________
+doctors-section
+
+get all doctor info : https://immense-beyond-64415.herokuapp.com/doctors/all
+get single doctor info : https://immense-beyond-64415.herokuapp.com/doctors/:id
+update doctor info : https://immense-beyond-64415.herokuapp.com/doctors/:id
+delete doctor info : https://immense-beyond-64415.herokuapp.com/doctors/:id
+post doctor info : https://immense-beyond-64415.herokuapp.com/doctors/add
+--------------------------

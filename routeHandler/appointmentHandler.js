@@ -43,7 +43,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST An appointment
-router.post("/", (req, res) => {
+router.post("/add", (req, res) => {
     const newAppointment = new Appointment(req.body);
     newAppointment.save((err) => {
         if (err) {
@@ -53,21 +53,6 @@ router.post("/", (req, res) => {
         } else {
             res.status(200).json({
                 message: "Appointment was inserted successfully!",
-            });
-        }
-    });
-});
-
-// POST MULTIPLE Appointment
-router.post("/all", (req, res) => {
-    Appointment.insertMany(req.body, (err) => {
-        if (err) {
-            res.status(500).json({
-                error: "There was a server side error!",
-            });
-        } else {
-            res.status(200).json({
-                message: "Appointment were inserted successfully!",
             });
         }
     });
@@ -98,7 +83,6 @@ router.put("/:id", (req, res) => {
             }
         }
     );
-    console.log(result);
 });
 
 // DELETE Appointment
