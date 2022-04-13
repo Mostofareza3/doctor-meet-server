@@ -5,6 +5,7 @@ const userHandler = require("./routeHandler/userHandler");
 const appointmentHandler = require("./routeHandler/appointmentHandler")
 const donorHandler = require("./routeHandler/donorHandler");
 const doctorHandler = require("./routeHandler/doctorHandler");
+const medicineHandler = require("./routeHandler/medicineHandler");
 const cors = require("cors");
 
 
@@ -40,6 +41,7 @@ app.use("/user", userHandler);
 app.use("/appointment", appointmentHandler);
 app.use("/donor", donorHandler);
 app.use("/doctors", doctorHandler);
+app.use("/medicine", medicineHandler);
 
 
 // default error handler

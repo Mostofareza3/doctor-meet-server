@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const donorSchema = mongoose.Schema({
     name: {
         type: String,
@@ -24,6 +25,8 @@ const donorSchema = mongoose.Schema({
         type: String,
         required: true
     }
-});
+},
+    { timestamps: true }
+);
 
 module.exports = donorSchema;

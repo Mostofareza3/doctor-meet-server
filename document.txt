@@ -3,17 +3,36 @@ url : https://immense-beyond-64415.herokuapp.com/
 
 api end-points:
 ____________________
-appointment-section:-----
+appointment-api:-----
 
 post an appointment: https://immense-beyond-64415.herokuapp.com/appointment/add
-update an appointment: https://immense-beyond-64415.herokuapp.com/:id
-delete an appointment: https://immense-beyond-64415.herokuapp.com/:id
-get all appointment: https://immense-beyond-64415.herokuapp.com/all
+update an appointment: https://immense-beyond-64415.herokuapp.com/appointment/:id
+delete an appointment: https://immense-beyond-64415.herokuapp.com/appointment/:id
+get all appointment: https://immense-beyond-64415.herokuapp.com/appointment/all
+
+---------------------
+
+____________________
+Donor-api:-----
+
+post a donor: https://immense-beyond-64415.herokuapp.com/donor/add
+update a donor: https://immense-beyond-64415.herokuapp.com/donor/:id
+delete a donor: https://immense-beyond-64415.herokuapp.com/donor/:id
+get all donor: https://immense-beyond-64415.herokuapp.com/donor/all
+
+---------------------
+____________________
+Medicine-api:-----
+
+post a medicine: https://immense-beyond-64415.herokuapp.com/medicine/add
+update a medicine: https://immense-beyond-64415.herokuapp.com/medicine/:id
+delete a medicine: https://immense-beyond-64415.herokuapp.com/medicine/:id
+get all medicine: https://immense-beyond-64415.herokuapp.com/medicine/all
 
 ---------------------
 
 __________________________
-doctors-section
+doctors-api
 
 get all doctor info : https://immense-beyond-64415.herokuapp.com/doctors/all
 get single doctor info : https://immense-beyond-64415.herokuapp.com/doctors/:id

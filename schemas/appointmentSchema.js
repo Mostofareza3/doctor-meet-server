@@ -14,6 +14,8 @@ const appointmentSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-});
+},
+    { timestamps: true }
+);
 
 module.exports = appointmentSchema;
