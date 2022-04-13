@@ -13,6 +13,14 @@ const app = express();
 dotenv.config()
 app.use(express.json());
 
+const corsOptions = {
+    origin: '*',
+    credentials: true,
+    optionSuccessStatus: 200,
+}
+app.use(cors(corsOptions));
+
+
 const port = process.env.PORT || 5000;
 
 // database connection with mongoose
@@ -33,14 +41,6 @@ app.use("/appointment", appointmentHandler);
 app.use("/donor", donorHandler);
 app.use("/doctors", doctorHandler);
 
-
-const corsOptions = {
-    origin: '*',
-    credentials: true,            //access-control-allow-credentials:true
-    optionSuccessStatus: 200,
-}
-
-app.use(cors(corsOptions)) // Use this after the variable declaration
 
 // default error handler
 const errorHandler = (err, req, res, next) => {
