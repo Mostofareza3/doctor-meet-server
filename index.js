@@ -5,6 +5,8 @@ const userHandler = require("./routeHandler/userHandler");
 const appointmentHandler = require("./routeHandler/appointmentHandler")
 const donorHandler = require("./routeHandler/donorHandler");
 const doctorHandler = require("./routeHandler/doctorHandler");
+const cors = require("cors");
+
 
 // express app initialization
 const app = express();
@@ -29,7 +31,16 @@ app.get("/", (req, res) => {
 app.use("/user", userHandler);
 app.use("/appointment", appointmentHandler);
 app.use("/donor", donorHandler);
-app.use("/doctors", doctorHandler)
+app.use("/doctors", doctorHandler);
+
+
+const corsOptions = {
+    origin: '*',
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions)) // Use this after the variable declaration
 
 // default error handler
 const errorHandler = (err, req, res, next) => {
