@@ -5,7 +5,6 @@ const donorSchema = require("../schemas/donorSchema");
 const DonorCollection = new mongoose.model("Donor", donorSchema);
 const checkLogin = require("../middleware/checkLogin");
 
-
 // GET All by donor
 // router.get("/all", async (req, res) => {
 
@@ -29,43 +28,44 @@ const checkLogin = require("../middleware/checkLogin");
 //     }
 // });
 
-router.get("/all/:group", async (req, res) => {
+router.get("/", async (req, res) => {
     // console.log("get all with query hit");
-    const { district, page } = req.query;
-    const { group } = req.params;
-    // console.log(req.params);
+    const { group, district, page } = req.query;
+    console.log(group, district, page); //B+ All 1
+
     let query = {};
-    if (group === 'All' && district === 'All') {
-        query = {}
-    } else if (group === 'All') {
-        query = { district }
-    } else if (district === 'All') {
-        query = { group }
+    if (group === "All" && district === "All") {
+        query = {};
+    } else if (group === "All") {
+        query = { district };
+    } else if (district === "All") {
+        query = { group };
     } else {
-        query = { group, district }
+        query = { group, district };
     }
     // console.log(query);
     try {
-
-        const LIMIT = 6;
-        const startIndex = Number((page) - 1) * LIMIT;
-        const data = await DonorCollection.find(query).sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
-        const total = await DonorCollection.countDocuments({});
+        const LIMIT = 4;
+        const startIndex = Number(page - 1) * LIMIT;
+        const data = await DonorCollection.find(query)
+            .sort({ _id: -1 })
+            .limit(LIMIT)
+            .skip(startIndex);
+        const total = await DonorCollection.find(query).count();
         res.status(200).json({
             result: data,
             total: total,
             message: "Success",
-        })
+        });
     } catch (err) {
         res.status(500).json({
-            error: "Donor not found."
-        })
+            error: "Donor not found.",
+        });
     }
-})
+});
 
 // GET specific donor by ID
 router.get("/:id", async (req, res) => {
-
     try {
         const data = await DonorCollection.find({ _id: req.params.id });
         res.status(200).json({
