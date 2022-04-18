@@ -2,12 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const donorSchema = require("../schemas/donorSchema");
-const donorStatisticsSchema = require("../schemas/donorStatisticsSchema");
 const DonorCollection = new mongoose.model("Donor", donorSchema);
-const DonorStatisticsCollection = new mongoose.model(
-    "DonorStatistics",
-    donorStatisticsSchema
-);
 const checkLogin = require("../middleware/checkLogin");
 
 // GET donor by search query
