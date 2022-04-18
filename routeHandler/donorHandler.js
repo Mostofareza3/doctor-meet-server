@@ -65,7 +65,20 @@ router.get("/single/:id", async (req, res) => {
 //get donor statistics data
 router.get("/statistics", async (req, res) => {
     try {
-        const data = await DonorStatisticsCollection.find({});
+        const groupData = await DonorCollection.aggregate([
+            { $group: { _id: "$group", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const districtData = await DonorCollection.aggregate([
+            { $group: { _id: "$district", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const genderData = await DonorCollection.aggregate([
+            { $group: { _id: "$gender", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const data = { groupData, districtData, genderData };
+
         res.status(200).json({
             result: data,
             message: "Success",
@@ -80,23 +93,6 @@ router.get("/statistics", async (req, res) => {
 // post donor information
 router.post("/add", async (req, res) => {
     const newDonor = new DonorCollection(req.body);
-
-    //update donor count
-    const query = { group: newDonor.group };
-    const newData = await DonorStatisticsCollection.findOne(query);
-    const options = { upsert: true };
-    const count = newData ? newData.count + 1 : 1;
-    const updateDoc = {
-        $set: {
-            count,
-        },
-    };
-    const result = await DonorStatisticsCollection.updateOne(
-        query,
-        updateDoc,
-        options
-    );
-
     //save new donor
     newDonor.save((err) => {
         if (err) {
