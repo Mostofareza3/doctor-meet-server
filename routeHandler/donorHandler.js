@@ -2,36 +2,19 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const donorSchema = require("../schemas/donorSchema");
+const donorStatisticsSchema = require("../schemas/donorStatisticsSchema");
 const DonorCollection = new mongoose.model("Donor", donorSchema);
+const DonorStatisticsCollection = new mongoose.model(
+    "DonorStatistics",
+    donorStatisticsSchema
+);
 const checkLogin = require("../middleware/checkLogin");
 
-// GET All by donor
-// router.get("/all", async (req, res) => {
-
-//     console.log("get all hit")
-//     const { page } = req.query;
-//     try {
-
-//         const LIMIT = 6;
-//         const startIndex = Number((page) - 1) * LIMIT;
-//         const total = await DonorCollection.countDocuments({});
-//         const data = await DonorCollection.find({}).sort({ _id: -1 }).limit(LIMIT).skip(startIndex).lean();
-//         res.status(200).json({
-//             result: data,
-//             message: "Success",
-//             total: total
-//         });
-//     } catch (err) {
-//         res.status(500).json({
-//             error: "There was a server side error!",
-//         });
-//     }
-// });
-
+// GET donor by search query
 router.get("/", async (req, res) => {
     // console.log("get all with query hit");
     const { group, district, page } = req.query;
-    console.log(group, district, page); //B+ All 1
+    // console.log(group, district, page);
 
     let query = {};
     if (group === "All" && district === "All") {
@@ -65,7 +48,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET specific donor by ID
-router.get("/:id", async (req, res) => {
+router.get("/single/:id", async (req, res) => {
     try {
         const data = await DonorCollection.find({ _id: req.params.id });
         res.status(200).json({
@@ -79,9 +62,42 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+//get donor statistics data
+router.get("/statistics", async (req, res) => {
+    try {
+        const data = await DonorStatisticsCollection.find({});
+        res.status(200).json({
+            result: data,
+            message: "Success",
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: "There was a server side error!",
+        });
+    }
+});
+
 // post donor information
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
     const newDonor = new DonorCollection(req.body);
+
+    //update donor count
+    const query = { group: newDonor.group };
+    const newData = await DonorStatisticsCollection.findOne(query);
+    const options = { upsert: true };
+    const count = newData ? newData.count + 1 : 1;
+    const updateDoc = {
+        $set: {
+            count,
+        },
+    };
+    const result = await DonorStatisticsCollection.updateOne(
+        query,
+        updateDoc,
+        options
+    );
+
+    //save new donor
     newDonor.save((err) => {
         if (err) {
             res.status(500).json({
