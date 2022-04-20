@@ -8,7 +8,7 @@ const checkLogin = require("../middleware/checkLogin");
 // GET donor by search query
 router.get("/", async (req, res) => {
     // console.log("get all with query hit");
-    const { group, district, page } = req.query;
+    const { group, district, page, rows } = req.query;
     // console.log(group, district, page);
 
     let query = {};
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     }
     // console.log(query);
     try {
-        const LIMIT = 4;
+        const LIMIT = rows;
         const startIndex = Number(page - 1) * LIMIT;
         const data = await DonorCollection.find(query)
             .sort({ _id: -1 })
@@ -104,8 +104,10 @@ router.post("/add", async (req, res) => {
 
 // update donor information
 router.put("/:id", (req, res) => {
+    const data = req.body;
     const result = DonorCollection.findByIdAndUpdate(
         { _id: req.params.id },
+        data,
         {
             new: true,
             useFindAndModify: false,
@@ -122,7 +124,6 @@ router.put("/:id", (req, res) => {
             }
         }
     );
-    console.log(result);
 });
 
 // DELETE Donor information
