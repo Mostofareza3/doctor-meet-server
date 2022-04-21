@@ -71,7 +71,6 @@ router.put("/:id", (req, res) => {
             }
         }
     );
-
 });
 
 // DELETE Doctor information
