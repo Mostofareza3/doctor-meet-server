@@ -81,8 +81,10 @@ router.post("/add", (req, res) => {
 
 // update doctor information
 router.put("/:id", (req, res) => {
+    const data = req.body;
     const result = DoctorsCollection.findByIdAndUpdate(
         { _id: req.params.id },
+        data,
         {
             new: true,
             useFindAndModify: false,
