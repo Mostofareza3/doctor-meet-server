@@ -35,6 +35,34 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+//get doctor statistics data
+router.get("/statistics", async (req, res) => {
+    try {
+        const specialistData = await DoctorsCollection.aggregate([
+            { $group: { _id: "$specialist", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const experienceData = await DoctorsCollection.aggregate([
+            { $group: { _id: "$experience", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const genderData = await DoctorsCollection.aggregate([
+            { $group: { _id: "$gender", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const data = { specialistData, experienceData, genderData };
+
+        res.status(200).json({
+            result: data,
+            message: "Success",
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: "There was a server side error!",
+        });
+    }
+});
+
 // post doctor information
 router.post("/add", (req, res) => {
     const newDoctor = new DoctorsCollection(req.body);
