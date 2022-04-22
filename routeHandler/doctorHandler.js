@@ -1,12 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
-// const router = express.Router();
+const router = express.Router();
 const doctorSchema = require("../schemas/doctorSchema");
 const DoctorsCollection = new mongoose.model("Doctor", doctorSchema);
-const router = express.Router();
 
 // GET All by doctor
 router.get("/all", async (req, res) => {
+    // console.log("hit all");
     try {
         const data = await DoctorsCollection.find({});
         res.status(200).json({
@@ -21,7 +21,7 @@ router.get("/all", async (req, res) => {
 });
 
 // GET specific doctor by ID
-router.get("/:id", async (req, res) => {
+router.get("single/:id", async (req, res) => {
     try {
         const data = await DoctorsCollection.find({ _id: req.params.id });
         res.status(200).json({
@@ -73,7 +73,7 @@ router.post("/add", (req, res) => {
             });
         } else {
             res.status(200).json({
-                message: "Donor information was inserted successfully!",
+                message: "Doctor information was inserted successfully!",
             });
         }
     });
@@ -96,7 +96,7 @@ router.put("/:id", (req, res) => {
                 });
             } else {
                 res.status(200).json({
-                    message: "Donor was updated successfully!",
+                    message: "Doctor was updated successfully!",
                 });
             }
         }
@@ -112,7 +112,7 @@ router.delete("/:id", (req, res) => {
             });
         } else {
             res.status(200).json({
-                message: "Donor was deleted successfully!",
+                message: "Doctor was deleted successfully!",
             });
         }
     });

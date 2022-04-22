@@ -51,9 +51,6 @@ const doctorSchema = mongoose.Schema(
                         lat: {
                             type: String,
                         },
-                        lag: {
-                            type: String,
-                        },
                     },
                 ],
             },
@@ -70,10 +67,12 @@ const doctorSchema = mongoose.Schema(
             type: Boolean,
             required: true,
         },
-        appointmentDay: {
-            type: [String],
-            required: true,
-        },
+        appointmentDay: [
+            {
+                type: String,
+                required: true,
+            },
+        ],
         phone: {
             type: String,
             required: true,
