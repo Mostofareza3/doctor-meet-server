@@ -7,15 +7,36 @@ const DoctorsCollection = new mongoose.model("Doctor", doctorSchema);
 // GET All by doctor
 router.get("/all", async (req, res) => {
     // console.log("hit all");
+    const { specialist, gender, page, rows } = req.query;
+    // console.log(specialist, gender, page);
+
+    let query = {};
+    if (specialist === "All" && gender === "All") {
+        query = {};
+    } else if (specialist === "All") {
+        query = { gender };
+    } else if (gender === "All") {
+        query = { specialist };
+    } else {
+        query = { specialist, gender };
+    }
+    // console.log(query);
     try {
-        const data = await DoctorsCollection.find({});
+        const LIMIT = rows;
+        const startIndex = Number(page - 1) * LIMIT;
+        const data = await DoctorsCollection.find(query)
+            .sort({ _id: -1 })
+            .limit(LIMIT)
+            .skip(startIndex);
+        const total = await DoctorsCollection.find(query).count();
         res.status(200).json({
             result: data,
+            total: total,
             message: "Success",
         });
     } catch (err) {
         res.status(500).json({
-            error: "There was a server side error!",
+            error: "Donor not found.",
         });
     }
 });
