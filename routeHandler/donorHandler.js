@@ -5,33 +5,11 @@ const donorSchema = require("../schemas/donorSchema");
 const DonorCollection = new mongoose.model("Donor", donorSchema);
 const checkLogin = require("../middleware/checkLogin");
 
-// GET All by donor
-// router.get("/all", async (req, res) => {
-
-//     console.log("get all hit")
-//     const { page } = req.query;
-//     try {
-
-//         const LIMIT = 6;
-//         const startIndex = Number((page) - 1) * LIMIT;
-//         const total = await DonorCollection.countDocuments({});
-//         const data = await DonorCollection.find({}).sort({ _id: -1 }).limit(LIMIT).skip(startIndex).lean();
-//         res.status(200).json({
-//             result: data,
-//             message: "Success",
-//             total: total
-//         });
-//     } catch (err) {
-//         res.status(500).json({
-//             error: "There was a server side error!",
-//         });
-//     }
-// });
-
+// GET donor by search query
 router.get("/", async (req, res) => {
     // console.log("get all with query hit");
-    const { group, district, page } = req.query;
-    console.log(group, district, page); //B+ All 1
+    const { group, district, page, rows } = req.query;
+    // console.log(group, district, page);
 
     let query = {};
     if (group === "All" && district === "All") {
@@ -45,7 +23,7 @@ router.get("/", async (req, res) => {
     }
     // console.log(query);
     try {
-        const LIMIT = 4;
+        const LIMIT = rows;
         const startIndex = Number(page - 1) * LIMIT;
         const data = await DonorCollection.find(query)
             .sort({ _id: -1 })
@@ -65,7 +43,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET specific donor by ID
-router.get("/:id", async (req, res) => {
+router.get("/single/:id", async (req, res) => {
     try {
         const data = await DonorCollection.find({ _id: req.params.id });
         res.status(200).json({
@@ -79,9 +57,38 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+//get donor statistics data
+router.get("/statistics", async (req, res) => {
+    try {
+        const groupData = await DonorCollection.aggregate([
+            { $group: { _id: "$group", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const districtData = await DonorCollection.aggregate([
+            { $group: { _id: "$district", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const genderData = await DonorCollection.aggregate([
+            { $group: { _id: "$gender", count: { $sum: 1 } } },
+            { $sort: { count: 1 } },
+        ]);
+        const data = { groupData, districtData, genderData };
+
+        res.status(200).json({
+            result: data,
+            message: "Success",
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: "There was a server side error!",
+        });
+    }
+});
+
 // post donor information
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
     const newDonor = new DonorCollection(req.body);
+    //save new donor
     newDonor.save((err) => {
         if (err) {
             res.status(500).json({
@@ -97,8 +104,10 @@ router.post("/add", (req, res) => {
 
 // update donor information
 router.put("/:id", (req, res) => {
+    const data = req.body;
     const result = DonorCollection.findByIdAndUpdate(
         { _id: req.params.id },
+        data,
         {
             new: true,
             useFindAndModify: false,
@@ -115,7 +124,6 @@ router.put("/:id", (req, res) => {
             }
         }
     );
-    console.log(result);
 });
 
 // DELETE Donor information

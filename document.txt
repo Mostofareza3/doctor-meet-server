@@ -18,7 +18,9 @@ Donor-api:-----
 post a donor: https://immense-beyond-64415.herokuapp.com/donor/add
 update a donor: https://immense-beyond-64415.herokuapp.com/donor/:id
 delete a donor: https://immense-beyond-64415.herokuapp.com/donor/:id
-get all donor: https://immense-beyond-64415.herokuapp.com/donor/all
+get all donor: https://immense-beyond-64415.herokuapp.com/donor?group=All&&district=All&&page=1&&rows=6
+get a single donor: https://immense-beyond-64415.herokuapp.com/donor/single/:id
+get donor statistics data: https://immense-beyond-64415.herokuapp.com/statistics
 
 ---------------------
 ____________________
