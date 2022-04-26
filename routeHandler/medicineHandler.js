@@ -4,13 +4,21 @@ const router = express.Router();
 const medicineSchema = require("../schemas/medicineSchema");
 const MedicineCollection = new mongoose.model("Medicine", medicineSchema);
 
-
 // GET All by medicine
 router.get("/all", async (req, res) => {
+    const { page, rows } = req.query;
+    let query = {};
     try {
-        const data = await MedicineCollection.find({});
+        const LIMIT = rows;
+        const startIndex = Number(page - 1) * LIMIT;
+        const data = await MedicineCollection.find(query)
+            .sort({ _id: -1 })
+            .limit(LIMIT)
+            .skip(startIndex);
+        const total = await MedicineCollection.find(query).count();
         res.status(200).json({
             result: data,
+            total: total,
             message: "Success",
         });
     } catch (err) {
